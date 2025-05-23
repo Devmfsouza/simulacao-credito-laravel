@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: simulacao-credito-laravel
+    runtime: php
+    buildCommand: composer install --optimize-autoloader --no-dev
+    startCommand: php -S 0.0.0.0:$PORT -t public/
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "true"
+      - key: APP_KEY
+        value: base64:lUuhYFTh11G86LdOqSeTK50v80FmasIamX5kvgipB6g=
+      - key: APP_NAME
+        value: "Simulacao de Credito"
