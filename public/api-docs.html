@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Simulação de Crédito - Documentação</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet">
+    <style>
+        .endpoint-card {
+            border-left: 4px solid #007bff;
+            margin-bottom: 2rem;
+        }
+
+        .method-badge {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .method-post {
+            background-color: #28a745;
+        }
+
+        .method-get {
+            background-color: #007bff;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container my-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4">API Simulação de Crédito</h1>
+            <p class="lead">Documentação completa das rotas e endpoints</p>
+            <p><strong>Base URL:</strong> <code>http://localhost:8000</code></p>
+        </div>
+
+        <!-- Endpoint 1: Consultar Ofertas -->
+        <div class="card endpoint-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>Consultar Ofertas de Crédito</h3>
+                <span class="badge method-post method-badge">POST</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Endpoint:</strong> <code>/api/simulacao/consultar</code></p>
+                <p><strong>Descrição:</strong> Consulta e processa as melhores ofertas de crédito para um CPF
+                    específico.</p>
+
+                <h5>Parâmetros</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Campo</th>
+                            <th>Tipo</th>
+                            <th>Obrigatório</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>cpf</td>
+                            <td>string</td>
+                            <td>Sim</td>
+                            <td>CPF do cliente (com ou sem formatação)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h5>Exemplo de Requisição</h5>
+                <pre><code class="language-json">{
+  "cpf": "111.111.111-11"
+}</code></pre>
+
+                <h5>Exemplo de Resposta (Sucesso)</h5>
+                <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "cpf": "111.111.111-11",
+    "ofertas": [
+      {
+        "instituicaoFinanceira": "Banco PingApp",
+        "modalidadeCredito": "crédito consignado",
+        "valorAPagar": 18500.75,
+        "valorSolicitado": 14625.00,
+        "taxaJuros": 1.18,
+        "qntParcelas": 48,
+        "valorParcela": 385.43,
+        "custoTotal": 3875.75,
+        "score_vantagem": 12.5
+      }
+    ],
+    "total_ofertas": 3,
+    "data_consulta": "23/05/2025 14:30:15"
+  }
+}</code></pre>
+
+                <h5>Possíveis Erros</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>400</td>
+                            <td>CPF é obrigatório ou inválido</td>
+                        </tr>
+                        <tr>
+                            <td>404</td>
+                            <td>Nenhuma oferta disponível para este CPF</td>
+                        </tr>
+                        <tr>
+                            <td>500</td>
+                            <td>Erro interno do servidor</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Endpoint 2: Histórico -->
+        <div class="card endpoint-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>Histórico de Simulações</h3>
+                <span class="badge method-get method-badge">GET</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Endpoint:</strong> <code>/api/simulacao/historico</code></p>
+                <p><strong>Descrição:</strong> Lista as últimas 50 simulações realizadas.</p>
+
+                <h5>Exemplo de Resposta</h5>
+                <pre><code class="language-json">{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "cpf": "111.111.111-11",
+      "ofertas_originais": [...],
+      "ofertas_processadas": [...],
+      "data_consulta": "2025-05-23T01:50:06.000000Z",
+      "created_at": "2025-05-23T01:50:06.000000Z"
+    }
+  ]
+}</code></pre>
+            </div>
+        </div>
+
+        <!-- Endpoint 3: Status -->
+        <div class="card endpoint-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>Status da API</h3>
+                <span class="badge method-get method-badge">GET</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Endpoint:</strong> <code>/api/status</code></p>
+                <p><strong>Descrição:</strong> Verifica se a API está funcionando.</p>
+
+                <h5>Exemplo de Resposta</h5>
+                <pre><code class="language-json">{
+  "success": true,
+  "message": "API Simulação de Crédito funcionando",
+  "version": "1.0.0",
+  "timestamp": "2025-05-23 14:30:15"
+}</code></pre>
+            </div>
+        </div>
+
+        <!-- Informações Técnicas -->
+        <div class="card mt-5">
+            <div class="card-header">
+                <h3>Informações Técnicas</h3>
+            </div>
+            <div class="card-body">
+                <h5>CPFs de Teste Disponíveis</h5>
+                <ul>
+                    <li><code>111.111.111-11</code> ou <code>11111111111</code></li>
+                    <li><code>123.123.123-12</code> ou <code>12312312312</code></li>
+                    <li><code>222.222.222-22</code> ou <code>22222222222</code></li>
+                </ul>
+
+                <h5>Headers Recomendados</h5>
+                <pre><code>Content-Type: application/json
+Accept: application/json
+X-CSRF-TOKEN: [token] (para requests via web)</code></pre>
+
+                <h5>Tecnologias Utilizadas</h5>
+                <ul>
+                    <li>Laravel 10.x</li>
+                    <li>MySQL</li>
+                    <li>Bootstrap 5</li>
+                    <li>Chart.js</li>
+                    <li>jQuery</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+
+</html>
