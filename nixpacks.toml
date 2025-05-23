@@ -1,0 +1,8 @@
+[providers]
+php = "8.1"
+
+[start]
+cmd = "php -S 0.0.0.0:$PORT -t public/"
+
+[variables]
+APP_ENV = "production"
